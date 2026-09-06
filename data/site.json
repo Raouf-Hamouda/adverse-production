@@ -1,0 +1,79 @@
+{
+  "brand": { "name": "ADVERSE", "sub": "Production", "email": "contact@adverseprod.com", "address": "60 rue François Ier, 75008 Paris", "linkedin": "https://www.linkedin.com/company/adverse-production" },
+  "nav": [ ["01", "Production", "production.html"], ["02", "Agency", "agency.html"], ["03", "Work", "portfolio.html"], ["04", "Contact", "contact.html"] ],
+  "hero": {
+    "video": "media/web/TgJozV1sl9Rrse6Sba5KNb5Fmk.mp4", "poster": "media/web/TgJozV1sl9Rrse6Sba5KNb5Fmk.jpg",
+    "eyebrow": "Production house and agency for real technology",
+    "title": "We capture missions and frame reality.",
+    "sub": "We are film makers, ad creators, VCs, sales, lobbyists. One crew with two faces: the production house that makes the film, and the agency that makes it land."
+  },
+  "partners": ["Safran", "Naval Group", "Alta Ares", "Ion-X", "Ægir", "Electronic Bird Control", "Oscar Mike"],
+  "faces": [
+    { "k": "01", "t": "Production", "d": "We make the film. Corporate films, motion 2D/3D, case studies and content creation, shot where the technology actually lives.", "href": "production.html" },
+    { "k": "02", "t": "Agency", "d": "We make it land. Influence strategy, branding and digital presence, spaces and experience design around the film.", "href": "agency.html" }
+  ],
+  "offer": {
+    "title": "All you need to make innovation seen and understood.",
+    "sub": "From vision to execution, we craft the narratives, tools and experiences that make your innovation unavoidable.",
+    "items": [
+      { "letter": "A", "face": "Production", "t": "Content & Visual Production", "d": "We produce impactful content that makes you unavoidable.", "list": ["Corporate films", "Motion 2D/3D", "Case studies"], "img": "media/4gLXVdehgB5LXuiAijqcHLMvoM.png", "href": "production.html" },
+      { "letter": "B", "face": "Agency", "t": "Influence Strategy", "d": "We help you define what matters and how to say it.", "list": ["Storytelling", "Influence", "Lobbying"], "img": "media/V847XMQuvVToFXwKPWp5TMTvVwc.png", "href": "agency.html#influence" },
+      { "letter": "C", "face": "Agency", "t": "Spaces & Experience Design", "d": "We design physical and digital spaces where your innovation can be seen, touched, understood.", "list": ["Showrooms", "Scenography", "Interactive displays"], "img": "media/HfeZMKZKAYDYm5zQ32ydgCmZ8.png", "href": "agency.html#spaces" },
+      { "letter": "D", "face": "Agency", "t": "Branding & Digital Presence", "d": "We create consistent, credible identity systems to support your growth.", "list": ["Graphic identity", "Website & landing pages", "Presentation kit"], "img": "media/W3XneDY1VsScIYOPMU6JfigPkQ.png", "href": "agency.html#branding" }
+    ]
+  },
+  "area": {
+    "eyebrow": "Adverse area",
+    "title": "Different worlds. Same obsession: turning real tech into real stories.",
+    "sub": "We're here to make sure your vision is felt, remembered and trusted.",
+    "photos": ["media/PajrnSRcD7MuZPL0ahYJMl900Ic.png", "media/jigwELqRWfcdu9ZdBI0CxUN9to.png", "media/crpgUy0BNsAdFjgaE8YWafVrUA.jpg", "media/Q9CZzdRfMzys5a56YHoBbbjexAM.png", "media/VklKJ0g3WQsaNzhsPaGet92uarw.jpg", "media/xVTdRU6Uh69IR0t3mQIVoRA0M7Q.jpg"]
+  },
+  "contact": { "title": "Builders, founders, explorers, operators, welcome home.", "sub": "It's time to make your narrative as bold as your tech." },
+  "projects": [
+    { "id": "ion-x", "name": "Ion-X", "sector": "Space propulsion", "d": "ION-X is building the next generation of propulsion systems for satellites.", "tags": ["Brand identity", "Web development", "Digital design"], "video": "media/web/77HFNbdqkvjyBUAGMFIzvGxGxUA.mp4", "poster": "media/web/77HFNbdqkvjyBUAGMFIzvGxGxUA.jpg", "link": "https://ion-x.space/", "home": true },
+    { "id": "aegir", "name": "Ægir", "sector": "Autonomous systems software", "d": "ÆGIR is developing command-and-control software for autonomous systems, integrating advanced data-fusion capabilities.", "tags": ["Brand identity", "Web development", "Video"], "video": "media/web/DfV5AunM2CfP4O7u4KkjLI46Qvk.mp4", "poster": "media/web/DfV5AunM2CfP4O7u4KkjLI46Qvk.jpg", "link": "https://aegir.fr/", "home": true },
+    { "id": "alta-ares", "name": "Alta Ares", "sector": "Air defense", "d": "Alta Ares develops AI-powered, real-time drone detection and guidance systems, operating on the edge without cloud dependency.", "tags": ["Video", "Motion design"], "video": "media/web/JdtwA32k85z1Avn3bOagHdtlM8U.mp4", "poster": "media/web/JdtwA32k85z1Avn3bOagHdtlM8U.jpg", "link": "https://altaares.com/", "home": true },
+    { "id": "ebc", "name": "Electronic Bird Control", "sector": "Biomimetic drones", "d": "Electronic Bird Control develops biomimetic drone solutions such as the E-Raptor, designed to deter bird nuisances and provide innovative aerial surveillance capabilities.", "tags": ["Brand identity", "Video", "Motion design"], "video": "media/web/q1g7qWRhrfDlzrMSrGk5NP3Iy0A.mp4", "poster": "media/web/q1g7qWRhrfDlzrMSrGk5NP3Iy0A.jpg", "link": "https://electronicbirdcontrol.com/", "home": true },
+    { "id": "oscar-mike", "name": "Oscar Mike", "sector": "Dual-tech investment", "d": "Oscar Mike is a dual-tech investment fund.", "tags": ["Video"], "video": "media/web/297sMiCIamDrkrysOmgl7uXzYs.mp4", "poster": "media/web/297sMiCIamDrkrysOmgl7uXzYs.jpg", "link": "https://www.linkedin.com/posts/louisdebouzy_je-suis-en-fauteuil-roulant-depuis-l%C3%A2ge-activity-7312389319820730369-8JwR", "home": false },
+    { "id": "safran", "name": "Safran", "sector": "Aerospace", "d": "Unreleased project.", "tags": ["Motion design", "Video", "Digital design"], "img": "media/r5yD6TYWBCPbVfWUnxitILrrTs.png", "link": "", "home": false },
+    { "id": "naval-group", "name": "Naval Group", "sector": "Naval defense", "d": "Content creation and strategy.", "tags": ["Content creation", "Strategy", "Video"], "img": "media/JQ4DWNfa4ULJJiu4ZH495S3C8.png", "link": "", "home": false }
+  ],
+  "production": {
+    "tag": "[PRODUCTION]", "title": "Production",
+    "statement": "We produce impactful content that makes you unavoidable. Films, motion and case studies for the people building real technology, shot where it actually lives.",
+    "video": "media/web/77HFNbdqkvjyBUAGMFIzvGxGxUA.mp4", "poster": "media/web/77HFNbdqkvjyBUAGMFIzvGxGxUA.jpg",
+    "chapters": [
+      { "id": "films", "t": "Corporate films", "w": "A film that shows the mission, the machine and the people behind it. Shot on site, with the crew that knows how to frame hardware, labs and operations.", "media": "media/web/DfV5AunM2CfP4O7u4KkjLI46Qvk.mp4", "poster": "media/web/DfV5AunM2CfP4O7u4KkjLI46Qvk.jpg" },
+      { "id": "motion", "t": "Motion 2D/3D", "w": "Explaining what cannot be filmed: systems, data flows, orbits and interfaces, animated with the precision the engineers expect and the clarity the buyers need.", "media": "media/web/JdtwA32k85z1Avn3bOagHdtlM8U.mp4", "poster": "media/web/JdtwA32k85z1Avn3bOagHdtlM8U.jpg" },
+      { "id": "case-studies", "t": "Case studies", "w": "One client, one problem, one result. The proof format for sales teams, investors and end users, built to be watched in a meeting and shared after it.", "media": "media/web/q1g7qWRhrfDlzrMSrGk5NP3Iy0A.mp4", "poster": "media/web/q1g7qWRhrfDlzrMSrGk5NP3Iy0A.jpg" },
+      { "id": "content", "t": "Content creation", "w": "The continuous layer: cutdowns, social formats and stills that keep the story alive between the big releases, on every channel your audience uses.", "media": "media/web/297sMiCIamDrkrysOmgl7uXzYs.mp4", "poster": "media/web/297sMiCIamDrkrysOmgl7uXzYs.jpg" }
+    ],
+    "statement_lines": ["Stories of", "innovation,", "captured in motion."],
+    "specs": [
+      { "t": "Corporate film", "rows": [["Format", "16:9 · 9:16 · 1:1"], ["Length", "Short to long form"], ["Delivery", "Master, cutdowns, stills"], ["Crew", "Director, DoP, sound, edit"]] },
+      { "t": "Motion 2D/3D", "rows": [["Format", "2D · 3D · mixed"], ["Sources", "CAD, data, interfaces"], ["Delivery", "Explainer, loop, insert"], ["Crew", "Motion designer, 3D artist"]] },
+      { "t": "Case study", "rows": [["Format", "Film and written"], ["Length", "Meeting length"], ["Delivery", "Film, one-pager, deck slide"], ["Crew", "Director, writer"]] }
+    ],
+    "partners_title": "Partners & selected missions",
+    "partners": ["ion-x", "aegir", "ebc", "alta-ares", "oscar-mike"]
+  },
+  "agency": {
+    "tag": "[AGENCY]", "title": "Agency",
+    "statement": "We help you define what matters and how to say it. Strategy, identity, spaces and digital presence, built around the film so the whole story holds together.",
+    "video": "media/web/TgJozV1sl9Rrse6Sba5KNb5Fmk.mp4", "poster": "media/web/TgJozV1sl9Rrse6Sba5KNb5Fmk.jpg",
+    "chapters": [
+      { "id": "influence", "t": "Influence strategy", "w": "Storytelling, influence and lobbying. From the first narrative to the decision-makers who need to hear it: clients, end users, investors and future talent.", "img": "media/V847XMQuvVToFXwKPWp5TMTvVwc.png" },
+      { "id": "branding", "t": "Branding & digital presence", "w": "Consistent, credible identity systems to support your growth: graphic identity, website and landing pages, presentation kit. One voice on every surface.", "img": "media/W3XneDY1VsScIYOPMU6JfigPkQ.png" },
+      { "id": "spaces", "t": "Spaces & experience design", "w": "Physical and digital spaces where your innovation can be seen, touched and understood: showrooms, scenography, interactive displays.", "img": "media/HfeZMKZKAYDYm5zQ32ydgCmZ8.png" }
+    ],
+    "statement_lines": ["Make your narrative", "as bold", "as your tech."],
+    "specs": [
+      { "t": "Influence strategy", "rows": [["Scope", "Narrative, messaging, positioning"], ["Audiences", "Clients, investors, talent, public"], ["Delivery", "Narrative platform, key messages, plan"], ["Team", "Strategist, writer"]] },
+      { "t": "Branding & digital", "rows": [["Scope", "Identity, website, presentation kit"], ["Delivery", "Guidelines, site, templates"], ["Stack", "Static, fast, owned by you"], ["Team", "Designer, developer"]] },
+      { "t": "Spaces & experience", "rows": [["Scope", "Showroom, scenography, interactive"], ["Delivery", "Concept, design, production"], ["Formats", "Permanent, event, touring"], ["Team", "Designer, producer"]] }
+    ],
+    "partners_title": "Partners & selected missions",
+    "partners": ["ion-x", "aegir", "ebc", "naval-group", "safran"]
+  },
+  "portfolio": { "title_lines": ["Stories of innovation,", "captured in motion."], "filters": ["All", "Video", "Motion design", "Brand identity", "Web development", "Digital design", "Content creation", "Strategy"] }
+}

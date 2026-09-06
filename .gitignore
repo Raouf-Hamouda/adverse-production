@@ -1,0 +1,11 @@
+# originals stay local, the site uses media/web/
+media/*.mp4
+media/logo/*.pgm
+media/logo/*.bin
+media/logo/*.npy
+media/logo/components.json
+media/logo/notches.json
+media/logo/logo_src.png
+.DS_Store
+DESIGN_SYSTEM.html
+NOTES_INTERNES.md

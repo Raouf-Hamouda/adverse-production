@@ -1,0 +1,98 @@
+/* ============================================================
+   ADVERSE  ·  design tokens  ·  v0.1 (6 Sept 2026)
+   The mix of three measured systems:
+   PALANTIR  -> 18px root, headline/body/caption ramp, per-section theming (light/dark/gray + accent),
+                6/10/12 grid with 10/15/30 gutters, 60/80/100 section rhythm, cubic easings, 1440 content width
+   ANDURIL   -> near-black ink, warm paper, stone greys, one acid signal colour, micro tracking,
+                300ms ease-out, 12 columns, 1.5s loader, digit roller, Lenis smooth scroll
+   APPLIED   -> mono label layer, 4px spacing scale, radius scale, visible grid lines,
+                header clearance, 1920 container, 150ms standard easing, 53rem article width
+   ============================================================ */
+:root {
+  /* ---------- fonts (Switzer + Inter are what Adverse already uses; the paid fonts stay as fallbacks) */
+  --font-display: "Switzer", "Alliance No.1", "Helvetica Now Display", system-ui, -apple-system, sans-serif;
+  --font-text:    "Inter", "Alliance No.2", system-ui, -apple-system, sans-serif;
+  --font-mono:    "JetBrains Mono", "Applied Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ---------- type ramp (root = 18px) */
+  --display-1: 5.5556rem;   /* 100 */
+  --display-2: 4rem;        /*  72 */
+  --h1: 2.7778rem;          /*  50 */
+  --h2: 2.2222rem;          /*  40 */
+  --h3: 1.8889rem;          /*  34 */
+  --body-l: 1.1111rem;      /*  20 */
+  --body: 1rem;             /*  18 */
+  --body-s: .8889rem;       /*  16 */
+  --caption: .6667rem;      /*  12 */
+  --overline: .5556rem;     /*  10 */
+  --lh-display: 1; --lh-heading: 1.1; --lh-body: 1.4; --lh-caption: 1.6;
+  --track-display: -.02em; --track-heading: -.015em; --track-body: -.009em; --track-caps: .05em;
+  --w-light: 300; --w-regular: 400; --w-medium: 500; --w-bold: 700;
+
+  /* ---------- palette */
+  --ink: #050505; --ink-2: #111111; --ink-3: #272a30; --ink-4: #2f3234;
+  --paper: #fffefa; --paper-2: #f1f0ea; --paper-3: #e5e5e5;
+  --stone: #b0b0a9; --gray: #5a606c; --gray-2: #969696; --gray-3: #bec2cb; --gray-4: #565654;
+  --acid: #dff140; --mint: #a6f2cc; --blue: #4e8af7; --blue-2: #006cfa; --salmon: #f2c4bf; --gold: #8c7847; --green: #2b5945;
+  --error: #ff4136;
+
+  /* ---------- roles (dark is the default, sections re-theme with data-theme) */
+  --accent: var(--acid);
+  --bg: var(--ink); --bg-2: var(--ink-2);
+  --fg: var(--paper); --fg-2: var(--paper-2); --fg-muted: var(--stone);
+  --line: rgba(255,255,255,.12); --line-strong: rgba(255,255,255,.32);
+  --accent-05: color-mix(in srgb, var(--accent) 5%, transparent);
+  --accent-10: color-mix(in srgb, var(--accent) 10%, transparent);
+  --on-accent: var(--ink);
+
+  /* ---------- layout */
+  --cols: 12; --gutter: 1.6667rem; --margin: 1.6667rem;
+  --max: 80rem; --container-max: 120rem; --article: 53rem; --breakout: 78rem;
+  --content-x: max(calc((100% - var(--max)) / 2), var(--margin));
+  --section-y: 5.5556rem; --header-clearance: 6.25rem; --nav-h: 4rem;
+
+  /* ---------- spacing (4px) + radius */
+  --s-1: .25rem; --s-2: .5rem; --s-3: .75rem; --s-4: 1rem; --s-5: 1.5rem; --s-6: 2rem; --s-7: 3rem; --s-8: 4rem; --s-9: 6rem; --s-10: 8rem;
+  --r-sm: .25rem; --r-md: .375rem; --r-lg: .5rem; --r-xl: .75rem;
+
+  /* ---------- motion */
+  --d-fast: 150ms; --d-base: 300ms; --d-slow: 500ms; --d-reveal: 900ms; --d-loader: 1500ms;
+  --ease-out: cubic-bezier(.215,.61,.355,1);
+  --ease-in: cubic-bezier(.55,.055,.675,.19);
+  --ease-in-out: cubic-bezier(.645,.045,.355,1);
+  --ease-std: cubic-bezier(.4,0,.2,1);
+  --ease-soft: cubic-bezier(.215,.62,.34,1);
+  --ease-back: cubic-bezier(.68,-.55,.265,1.55);
+}
+
+/* ---------- breakpoints: 630 / 855 / 1080 / 1620 (Palantir) + 1920 wide */
+@media (max-width: 1079.98px) {
+  :root { --cols: 10; --gutter: .8333rem; --margin: 1.1111rem; --section-y: 4.4444rem; --header-clearance: 5rem;
+          --display-1: 4rem; --display-2: 2.7778rem; --h1: 2.2222rem; --h2: 1.8889rem; --h3: 1.5556rem; }
+}
+@media (max-width: 629.98px) {
+  :root { --cols: 6; --gutter: .5556rem; --section-y: 3.3333rem; --header-clearance: 4rem; --nav-h: 3.5rem;
+          --display-1: 2.7778rem; --display-2: 2.2222rem; --h1: 1.8889rem; --h2: 1.6667rem; --h3: 1.3333rem; --body-l: 1rem; }
+}
+@media (min-width: 1920px) {
+  :root { --display-1: 6.6667rem; --display-2: 4.4444rem; }
+}
+
+/* ---------- section themes */
+[data-theme="dark"]  { --bg: var(--ink);     --bg-2: var(--ink-2);   --fg: var(--paper); --fg-2: var(--paper-2); --fg-muted: var(--stone);
+                       --line: rgba(255,255,255,.12); --line-strong: rgba(255,255,255,.32); color-scheme: dark; }
+[data-theme="light"] { --bg: var(--paper);   --bg-2: #ffffff;        --fg: var(--ink);   --fg-2: var(--ink-3);   --fg-muted: var(--gray);
+                       --line: rgba(5,5,5,.1);        --line-strong: rgba(5,5,5,.32);        color-scheme: light; }
+[data-theme="gray"]  { --bg: var(--paper-3); --bg-2: var(--paper-2); --fg: var(--ink);   --fg-2: var(--ink-3);   --fg-muted: var(--gray);
+                       --line: rgba(5,5,5,.12);       --line-strong: rgba(5,5,5,.36);        color-scheme: light; }
+[data-theme="accent"]{ --bg: var(--accent);  --bg-2: var(--accent);  --fg: var(--ink);   --fg-2: var(--ink-3);   --fg-muted: var(--ink-4);
+                       --line: rgba(5,5,5,.15);       --line-strong: rgba(5,5,5,.4);         color-scheme: light; }
+
+/* ---------- accent choices (client decision; acid is the placeholder) */
+[data-accent="acid"]   { --accent: var(--acid);   --on-accent: var(--ink); }
+[data-accent="mint"]   { --accent: var(--mint);   --on-accent: var(--ink); }
+[data-accent="blue"]   { --accent: var(--blue);   --on-accent: #ffffff; }
+[data-accent="blue-2"] { --accent: var(--blue-2); --on-accent: #ffffff; }
+[data-accent="salmon"] { --accent: var(--salmon); --on-accent: var(--ink); }
+[data-accent="gold"]   { --accent: var(--gold);   --on-accent: #ffffff; }
+[data-accent="green"]  { --accent: var(--green);  --on-accent: #ffffff; }
