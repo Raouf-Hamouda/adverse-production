@@ -3,7 +3,7 @@
 import json, html, os, datetime
 ROOT = os.path.dirname(os.path.abspath(__file__))
 D = json.load(open(os.path.join(ROOT, "data/site.json"), encoding="utf-8"))
-B = D["brand"]; STAMP = datetime.datetime.now().strftime("%Y%m%d%H%M")
+B = D["brand"]; STAMP = datetime.datetime.now().strftime("%Y%m%d%H%M"); SITE_URL = "https://raouf-hamouda.github.io/adverse-production/"
 E = html.escape
 PROJ = {p["id"]: p for p in D["projects"]}
 
@@ -16,7 +16,10 @@ def head(title, desc):
 <meta http-equiv="Cache-Control" content="no-store">
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc)}">
-<meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:type" content="website">
+<meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:type" content="website"><meta property="og:site_name" content="Adverse Production">
+<meta property="og:image" content="{SITE_URL}media/logo/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Adverse Production">
+<meta property="og:image" content="{SITE_URL}media/logo/og-square.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="1200">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{SITE_URL}media/logo/og.png">
 <link rel="icon" href="media/logo/favicon.svg?v={STAMP}" type="image/svg+xml">
 <link rel="icon" href="media/logo/favicon-32.png?v={STAMP}" sizes="32x32" type="image/png">
 <link rel="icon" href="media/logo/favicon-192.png?v={STAMP}" sizes="192x192" type="image/png">
