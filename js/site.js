@@ -88,12 +88,21 @@
       if (window.ScrollTrigger) ScrollTrigger.refresh(); });
   }
 
-  /* ---- form: no backend yet, falls back to a prefilled email */
-  document.querySelectorAll('form[data-mailto]').forEach(f => f.addEventListener('submit', e => {
+  /* ---- form: posts JSON to data-endpoint (brand.form_endpoint in site.json); without one, falls back to a prefilled email */
+  document.querySelectorAll('form[data-mailto]').forEach(f => f.addEventListener('submit', async e => {
     e.preventDefault(); const d = new FormData(f); if (d.get('website')) return;
-    const body = ['Name: ' + d.get('name'), 'Email: ' + d.get('email'), 'Company: ' + (d.get('company') || ''), '', d.get('message')].join('\n');
-    location.href = `mailto:${f.dataset.mailto}?subject=${encodeURIComponent('Contact from adverseprod.com')}&body=${encodeURIComponent(body)}`;
-    const n = f.querySelector('.note'); if (n) n.textContent = 'Opening your email app';
+    const n = f.querySelector('.note'), say = (t, state) => { if (n) { n.textContent = t; n.dataset.state = state || ''; } }, mail = f.dataset.mailto;
+    if (!f.dataset.endpoint) {
+      const body = ['Name: ' + d.get('name'), 'Email: ' + d.get('email'), 'Company: ' + (d.get('company') || ''), '', d.get('message')].join('\n');
+      location.href = `mailto:${mail}?subject=${encodeURIComponent('Contact from adverseprod.com')}&body=${encodeURIComponent(body)}`; say('Opening your email app'); return;
+    }
+    d.delete('website'); f.setAttribute('aria-busy', 'true'); say('Sending');
+    try {
+      const r = await fetch(f.dataset.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ ...Object.fromEntries(d), _subject: 'Contact from adverseprod.com' }) });
+      if (!r.ok) throw new Error(r.status);
+      f.reset(); say('Message sent. Thank you.', 'ok');
+    } catch (err) { say('Could not send. Write to ' + mail, 'error'); }
+    f.removeAttribute('aria-busy');
   }));
 
   /* ---- nav blend: menu open keeps nav readable */

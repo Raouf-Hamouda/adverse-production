@@ -11,7 +11,7 @@ def vsrc(v): return v + (f"#t={VSTART[v]}" if v in VSTART else "")
 
 def head(title, desc):
     return f'''<!doctype html>
-<html lang="en" class="no-js" data-accent="acid">
+<html lang="en" class="no-js" data-accent="adverse">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -90,13 +90,13 @@ def contact_block(theme="light", idx="05", head=True):   # head=False on the con
         <p class="body-s muted">{E(B["address"])}</p>
       </div>
       <div class="form-wrap">
-        <form class="form" data-mailto="{B["email"]}" novalidate>
+        <form class="form" data-mailto="{B["email"]}" data-endpoint="{E(B.get("form_endpoint", ""))}">
           <div class="field"><label for="f-name">Name*</label><input id="f-name" name="name" type="text" required autocomplete="name"></div>
           <div class="field"><label for="f-email">Email*</label><input id="f-email" name="email" type="email" required autocomplete="email"></div>
           <div class="field full"><label for="f-company">Company</label><input id="f-company" name="company" type="text" autocomplete="organization"></div>
           <div class="field full"><label for="f-msg">What are you building?</label><textarea id="f-msg" name="message"></textarea></div>
           <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <div class="full row between"><span class="note">No backend yet · opens your email app</span><button class="btn btn-accent" type="submit">Send <span class="arrow">→</span></button></div>
+          <div class="full row between"><span class="note" role="status">{"" if B.get("form_endpoint") else "Opens your email app"}</span><button class="btn btn-accent" type="submit">Send <span class="arrow">→</span></button></div>
         </form>
       </div>
     </div>
@@ -116,7 +116,10 @@ def home():
     h = D["hero"]; o = D["offer"]; a = D["area"]
     first, dot, rest = h["sub"].partition(". ")   # phone shows the first sentence only (.more is hidden under 630)
     sub = E(first + dot.strip()) + (f' <span class="more">{E(rest)}</span>' if rest else "")
-    marquee = "".join(f"<span>{E(n)}</span>" for n in D["partners"])
+    def partner(n):   # logo as a mask, so every mark takes the one text colour; names without a file stay as text
+        l = D.get("partner_logos", {}).get(n)
+        return (f'<span class="logo" role="img" aria-label="{E(n)}" style="-webkit-mask-image:url({l["src"]});mask-image:url({l["src"]});--w:{2.1 * l["ratio"] ** 0.6:.2f}em;--r:{l["ratio"]}"></span>' if l else f"<span>{E(n)}</span>")
+    marquee = "".join(partner(n) for n in D["partners"])
     faces = "".join(f'''<a class="feature" href="{f["href"]}" data-reveal><span class="k">{f["k"]}</span><span class="t">{E(f["t"])}</span><span class="d">{E(f["d"])}</span><span class="go">→</span></a>''' for f in D["faces"])
     offers = "".join(f'''<a class="offer" href="{i["href"]}" data-reveal="{n*0.05:.2f}"><img src="{i["img"]}" alt="" loading="lazy"><span class="letter"><span>—— {i["letter"]}</span><span>{E(i["face"])}</span></span><span class="t">{E(i["t"])}</span><span class="d">{E(i["d"])}</span><ul>{"".join(f"<li>{E(x)}</li>" for x in i["list"])}</ul><span class="go">Learn more →</span></a>''' for n, i in enumerate(o["items"]))
     work = [p for p in D["projects"] if p.get("home")]
@@ -249,8 +252,8 @@ def row(i, p):
     """One project row: media left, sector + name + text middle, tags + link right. Used on the portfolio page and on the home."""
     media = (f'<video data-hover muted playsinline loop preload="none" poster="{p["poster"]}" src="{vsrc(p["video"])}"></video>' if p.get("video") else f'<img src="{p["img"]}" alt="{E(p["name"])}" loading="lazy">')
     tags = "".join(f'<span class="tag">{E(t)}</span>' for t in p["tags"])
-    link = f'<a class="btn" href="{p["link"]}" target="_blank" rel="noopener">Visit <span class="arrow">→</span></a>' if p["link"] else '<span class="caption">Unreleased</span>'
-    return f'''<article class="prow" data-tags="{E("|".join(p["tags"]))}" data-reveal><div class="m">{media}</div>
+    link = f'<a class="btn" href="{p["link"]}" target="_blank" rel="noopener">{"Watch" if "vimeo.com" in p["link"] else "Visit"} <span class="arrow">→</span></a>' if p["link"] else '<span class="caption">Unreleased</span>'
+    return f'''<article class="prow" data-tags="{E("|".join(p["tags"]))}" data-reveal><div class="m{" logo" if p.get("logo") else ""}">{media}</div>
         <div class="i"><p class="meta">{i+1:02d} · {E(p["sector"])}</p><h3 class="name">{E(p["name"])}</h3><p class="d">{E(p["d"])}</p></div>
         <div class="r"><div class="tags">{tags}</div>{link}</div></article>'''
 

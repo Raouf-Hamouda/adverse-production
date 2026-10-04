@@ -20,7 +20,7 @@
     gsap.registerPlugin(ScrollTrigger);
     if (lenis) lenis.on('scroll', ScrollTrigger.update);
     reveals.forEach(el => gsap.to(el, { opacity: 1, y: 0, duration: 0.9, delay: parseFloat(el.dataset.reveal) || 0, ease: 'power3.out',
-                                        scrollTrigger: { trigger: el, start: 'top 88%', once: true } }));
+                                        scrollTrigger: { trigger: el, start: el.getBoundingClientRect().top < innerHeight ? 'top bottom' : 'top 88%', once: true } }));   /* what is on the first screen shows at load */
   } else reveals.forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
 
   /* ---- digit roller: <span data-roll="7" data-pad="2">0</span> */
