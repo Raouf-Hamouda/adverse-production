@@ -114,8 +114,7 @@ def project_card(p, wide=False):
 # ---------------------------------------------------------------- HOME
 def home():
     h = D["hero"]; o = D["offer"]; a = D["area"]
-    first, dot, rest = h["sub"].partition(". ")   # phone shows the first sentence only (.more is hidden under 630)
-    sub = E(first + dot.strip()) + (f' <span class="more">{E(rest)}</span>' if rest else "")
+    sub = "".join(f"<span>{E(l)}</span>" for l in h["sub_lines"])   # three set lines, one per row
     def partner(n):   # logo as a mask, so every mark takes the one text colour; names without a file stay as text
         l = D.get("partner_logos", {}).get(n)
         return (f'<span class="logo" role="img" aria-label="{E(n)}" style="-webkit-mask-image:url({l["src"]});mask-image:url({l["src"]});--w:{2.1 * l["ratio"] ** 0.6:.2f}em;--r:{l["ratio"]}"></span>' if l else f"<span>{E(n)}</span>")
@@ -137,7 +136,7 @@ def home():
     <p class="eyebrow" data-reveal>{E(h["eyebrow"])}</p>
     <h1 class="display-1 measure" style="margin-top:var(--s-5)" data-reveal="0.1">{E(h["title"])}</h1>
     <div class="grid" style="margin-top:var(--s-7)">
-      <p class="body-l span-5 muted" data-reveal="0.2">{sub}</p>
+      <p class="body-l span-5 muted sub" data-reveal="0.2">{sub}</p>
       <div class="span-7 cta" style="justify-content:flex-end;align-self:end" data-reveal="0.3"><a class="btn btn-accent" href="portfolio.html">See the work <span class="arrow">→</span></a><a class="btn" href="#contact">Get in touch</a></div>
     </div>
   </div>

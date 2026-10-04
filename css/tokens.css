@@ -91,7 +91,7 @@
                        --line: rgba(5,5,5,.15);       --line-strong: rgba(5,5,5,.4);         color-scheme: light; }
 
 /* ---------- accent choices (client decision; acid is the placeholder) */
-[data-accent="adverse"] { --accent: var(--vermilion); --on-accent: var(--ink); --accent-2: var(--sky); }
+[data-accent="adverse"] { --accent: var(--acid); --on-accent: var(--ink); --accent-2: var(--sky); }   /* acid = the first accent, kept for what you click; sky = markers */
 [data-accent="adverse"] [data-theme="light"], [data-accent="adverse"] [data-theme="gray"] { --accent-2: var(--sky-deep); }
 [data-accent="adverse"] [data-theme="accent"] { --bg: var(--sky); --bg-2: var(--sky); }
 [data-accent="acid"]   { --accent: var(--acid);   --on-accent: var(--ink); }

@@ -6,7 +6,7 @@
     "video": "media/web/TgJozV1sl9Rrse6Sba5KNb5Fmk.mp4", "poster": "media/web/TgJozV1sl9Rrse6Sba5KNb5Fmk.jpg",
     "eyebrow": "Production house and agency for real technology",
     "title": "We capture missions and frame reality.",
-    "sub": "We are film makers, ad creators, VCs, sales, lobbyists. One crew with two faces: the production house that makes the film, and the agency that makes it land."
+    "sub_lines": ["Film makers. Ad creators.", "VCs. Sales. Lobbyists.", "One crew, two faces."]
   },
   "partners": ["Safran", "Naval Group", "Alta Ares", "Ion-X", "Ægir", "Electronic Bird Control", "Oscar Mike"],
   "faces": [
