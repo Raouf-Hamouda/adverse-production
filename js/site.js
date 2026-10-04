@@ -85,7 +85,6 @@
     const items = [...document.querySelectorAll('[data-tags]')];
     tabs.addEventListener('click', e => { const b = e.target.closest('.tab'); if (!b) return; const f = b.dataset.filter;
       tabs.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t === b)); items.forEach(it => it.classList.toggle('hidden', f !== 'all' && !it.dataset.tags.split('|').includes(f)));
-      document.querySelectorAll('#films').forEach(sec => { sec.hidden = !sec.querySelector('[data-tags]:not(.hidden)'); });   // no empty Films heading
       if (window.ScrollTrigger) ScrollTrigger.refresh(); });
   }
 

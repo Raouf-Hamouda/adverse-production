@@ -253,24 +253,18 @@ def row(i, p):
     media = (f'<video data-hover muted playsinline loop preload="none" poster="{p["poster"]}" src="{vsrc(p["video"])}"></video>' if p.get("video") else f'<img src="{p["img"]}" alt="{E(p["name"])}" loading="lazy">')
     tags = "".join(f'<span class="tag">{E(t)}</span>' for t in p["tags"])
     btn = lambda href, t: f'<a class="btn" href="{href}" target="_blank" rel="noopener">{t} <span class="arrow">→</span></a>'
-    film = p.get("video") or (p["link"] if "vimeo.com" in p["link"] else "")
+    film = p.get("video", "")
     site = p["link"] if p["link"] and "Web development" in p["tags"] else ""   # the site is shown only when Adverse built it
     link = (btn(site, "View Website") if site else "") + (btn(film, "View Video") if film else "") or '<span class="caption">Unreleased</span>'
     return f'''<article class="prow" id="{p["id"]}" data-tags="{E("|".join(p["tags"]))}" data-reveal><div class="m{" logo" if p.get("logo") else ""}">{media}</div>
         <div class="i"><p class="meta">{i+1:02d} · {E(p["sector"])}</p><h3 class="name">{E(p["name"])}</h3><p class="d">{E(p["d"])}</p></div>
         <div class="r"><div class="tags">{tags}</div><div class="btns">{link}</div></div></article>'''
 
-def film_card(p):
-    """Compact film card: poster, kind · year · length, title, credit line. The whole card opens the film."""
-    return f'''<a class="fcard" href="{p["link"]}" target="_blank" rel="noopener" data-tags="{E("|".join(p["tags"]))}" data-reveal><img src="{p["img"]}" alt="" loading="lazy">
-        <p class="meta">{E(p["sector"])}</p><h3 class="name">{E(p["name"])}</h3><p class="d">{E(p["d"])}</p></a>'''
 
 def portfolio():
     pf = D["portfolio"]
     tabs = "".join(f'<button class="tab" role="tab" data-filter="{"all" if f == "All" else E(f)}" aria-selected="{"true" if f == "All" else "false"}">{E(f)}</button>' for f in pf["filters"])
-    isfilm = lambda p: p["id"].startswith("film-")
-    rows = "".join(row(i, p) for i, p in enumerate(p for p in D["projects"] if not isfilm(p)))
-    films = "".join(film_card(p) for p in D["projects"] if isfilm(p))
+    rows = "".join(row(i, p) for i, p in enumerate(D["projects"]))
     return f'''{head("Portfolio · Adverse Production", "Stories of innovation, captured in motion. Selected work for Ion-X, Ægir, Alta Ares, Electronic Bird Control, Oscar Mike, Safran and Naval Group.")}
 {loader()}
 {nav("portfolio.html")}
@@ -284,12 +278,6 @@ def portfolio():
 </section>
 <section class="section" data-theme="dark" style="padding-top:0">
   <div class="container rows">{rows}</div>
-</section>
-<section class="section" data-theme="dark" id="films" style="padding-top:0">
-  <div class="container">
-    <div class="sec-head"><span class="num">Films</span><h2 class="ttl h2">{E(pf["films_title"])}</h2><p class="aside">{E(pf["films_sub"])}</p></div>
-    <div class="films">{films}</div>
-  </div>
 </section>
 {contact_block("light", "Get in touch")}
 </main>
