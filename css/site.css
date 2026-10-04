@@ -359,4 +359,7 @@ p { text-wrap: pretty; }
 .footer .legal .c { grid-column: span 6; } .footer .legal .t { grid-column: span 4; } .footer .legal .top { grid-column: span 2; justify-self: end; color: var(--fg); transition: color var(--d-fast); }
 .footer .legal .top:hover { color: var(--accent); }
 @media (max-width: 1079.98px) { .footer .legal .c { grid-column: span 4; } .footer .legal .t { grid-column: span 4; } }
-@media (max-width: 629.98px) { .footer .legal .c { grid-column: span 4; grid-row: 1; } .footer .legal .top { grid-column: span 2; grid-row: 1; } .footer .legal .t { grid-column: 1 / -1; grid-row: 2; } .footer { padding-bottom: var(--s-7); } }
+@media (max-width: 629.98px) { .footer .legal .c { grid-column: span 4; grid-row: 1; } .footer .legal .top { grid-column: span 2; grid-row: 1; } .footer .legal .t { grid-column: 1 / -1; grid-row: 2; } }
+/* ---------- footer ends on its base line: no dead band under it */
+.footer { padding-bottom: var(--s-6); } .footer .big { margin-top: var(--s-8); } .footer .legal { margin-top: var(--s-5); padding-top: var(--s-4); }
+@media (max-width: 629.98px) { .footer { padding-bottom: var(--s-5); } .footer .big { margin-top: var(--s-7); } }
