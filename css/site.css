@@ -245,7 +245,7 @@ html.no-js .words .w { opacity: 1; }
 
 /* ---------- portfolio tabs (Applied news filters) */
 .tabs { display: flex; gap: var(--s-2); flex-wrap: wrap; }
-.tab { font-family: var(--font-mono); font-size: var(--overline); letter-spacing: var(--track-caps); text-transform: uppercase; padding: .6em .9em; border: 1px solid var(--line); border-radius: 100px; color: var(--fg-muted); transition: all var(--d-fast) var(--ease-std); }
+.tab { font-family: var(--font-mono); font-size: var(--overline); letter-spacing: var(--track-caps); text-transform: uppercase; padding: .6em .9em; border: 1px solid var(--line); border-radius: var(--r-sm); color: var(--fg-muted); transition: all var(--d-fast) var(--ease-std); }
 .tab:hover { border-color: var(--line-strong); color: var(--fg); } .tab[aria-selected="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
 .rows { border-top: 1px solid var(--line); }
 .prow { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--s-4); padding: var(--s-6) 0; border-bottom: 1px solid var(--line); align-items: start; }
@@ -318,8 +318,9 @@ html { overflow-x: hidden; } html, body { overflow-x: clip; }   /* hidden = fall
 /* ---------- client pass (Flavyen, 4 Oct): film first in the hero, title on one line, films shown whole in 16:9 */
 .hero .bg video, .hero .bg img { opacity: .92; }
 .hero .bg::after { background: linear-gradient(to top, rgba(5,5,5,.88) 0%, rgba(5,5,5,.35) 32%, rgba(5,5,5,0) 62%, rgba(5,5,5,.3) 100%); }
-@media (min-width: 1080px) { .hero h1 { max-width: none; white-space: nowrap; font-size: min(var(--display-2), 4.9vw); } }
+@media (min-width: 1080px) { .hero h1 { max-width: none; white-space: nowrap; font-size: min(var(--display-2), 5vw); } }
 .prow .m, .chapter .media { aspect-ratio: 16 / 9; background: #000; }
+.prow .m:not(.logo) { background: none; } .prow .m video { object-position: center top; }   /* the picture starts on the same line as the text beside it */
 .prow .m video, .chapter .media video { object-fit: contain; transform: none; }
 .prow { scroll-margin-top: calc(var(--nav-h) + var(--s-5)); }
 .strip img { aspect-ratio: 16 / 9; } .strip a { display: block; }
@@ -341,3 +342,6 @@ html { overflow-x: hidden; } html, body { overflow-x: clip; }   /* hidden = fall
 .reticle .h { left: 0; right: 0; top: 0; height: 1px; } .reticle .v { top: 0; bottom: 0; left: 0; width: 1px; }
 .reticle .box { position: absolute; left: -1.1rem; top: -1.1rem; width: 2.2rem; height: 2.2rem; border: 1px solid rgba(255,255,255,.55); }
 .reticle .xy { position: absolute; left: 1.6rem; top: .5rem; font-family: var(--font-mono); font-size: var(--overline); letter-spacing: var(--track-caps); color: rgba(255,255,255,.75); white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* ---------- design scan (4 Oct): one corner system, no orphan words */
+h1, h2, h3, .eyebrow, .sec-head .aside, .fcard .name { text-wrap: balance; }
+p { text-wrap: pretty; }
