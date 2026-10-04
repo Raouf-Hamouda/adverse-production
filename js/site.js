@@ -85,6 +85,7 @@
     const items = [...document.querySelectorAll('[data-tags]')];
     tabs.addEventListener('click', e => { const b = e.target.closest('.tab'); if (!b) return; const f = b.dataset.filter;
       tabs.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t === b)); items.forEach(it => it.classList.toggle('hidden', f !== 'all' && !it.dataset.tags.split('|').includes(f)));
+      document.querySelectorAll('#films').forEach(sec => { sec.hidden = !sec.querySelector('[data-tags]:not(.hidden)'); });   // no empty Films heading
       if (window.ScrollTrigger) ScrollTrigger.refresh(); });
   }
 
@@ -104,6 +105,17 @@
     } catch (err) { say('Could not send. Write to ' + mail, 'error'); }
     f.removeAttribute('aria-busy');
   }));
+
+  /* ---- cursor reticle on the heroes (mouse only): crosshair + frame + position in the frame */
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduce) document.querySelectorAll('.hero, .mission-hero').forEach(hero => {
+    const r = document.createElement('div'); r.className = 'reticle'; r.setAttribute('aria-hidden', 'true');
+    r.innerHTML = '<i class="h"></i><i class="v"></i><span class="box"></span><span class="xy"></span>'; hero.appendChild(r);
+    const [h, v, box, xy] = r.children; let x = 0, y = 0, raf = 0;
+    const draw = () => { raf = 0; h.style.transform = `translateY(${y}px)`; v.style.transform = `translateX(${x}px)`; box.style.transform = xy.style.transform = `translate(${x}px, ${y}px)`;
+      xy.textContent = 'X ' + String(Math.round(x)).padStart(4, '0') + ' · Y ' + String(Math.round(y)).padStart(4, '0'); };
+    hero.addEventListener('mousemove', e => { const b = hero.getBoundingClientRect(); x = e.clientX - b.left; y = e.clientY - b.top; r.classList.add('on'); if (!raf) raf = requestAnimationFrame(draw); });
+    hero.addEventListener('mouseleave', () => r.classList.remove('on'));
+  });
 
   /* ---- nav blend: menu open keeps nav readable */
   const nav = document.querySelector('.nav'); if (nav && menu) new MutationObserver(() => nav.style.mixBlendMode = menu.classList.contains('open') ? 'normal' : '').observe(menu, { attributes: true });

@@ -46,8 +46,9 @@ def loader():
 <div class="meta"><span>{E(B["sub"])} · Paris</span><span><span data-pct>000</span> / 100</span></div><div class="bar"><i></i></div></div>'''
 
 def nav(current=""):
-    items = "".join(f'<a class="link" href="{h}"{" aria-current=page" if h == current else ""}><span class="n">{n}</span>{E(t)}</a>' for n, t, h in D["nav"])
-    menu = "".join(f'<a class="item" href="{h}"{" aria-current=page" if h == current else ""}><span class="n">{n}</span>{E(t)}</a>' for n, t, h in D["nav"])
+    NAV = [["00", "Home", "index.html"]] + D["nav"]
+    items = "".join(f'<a class="link" href="{h}"{" aria-current=page" if h == current else ""}><span class="n">{n}</span>{E(t)}</a>' for n, t, h in NAV)
+    menu = "".join(f'<a class="item" href="{h}"{" aria-current=page" if h == current else ""}><span class="n">{n}</span>{E(t)}</a>' for n, t, h in NAV)
     return f'''<nav class="nav" data-nav aria-label="Main">
   <a class="brand" href="index.html" aria-label="{E(B["name"])} {E(B["sub"])}"><img class="logo" src="media/logo/logo_white.png" alt=""><small>{E(B["sub"])}</small></a>
   <div class="nav-items">{items}</div>
@@ -251,15 +252,25 @@ def row(i, p):
     """One project row: media left, sector + name + text middle, tags + link right. Used on the portfolio page and on the home."""
     media = (f'<video data-hover muted playsinline loop preload="none" poster="{p["poster"]}" src="{vsrc(p["video"])}"></video>' if p.get("video") else f'<img src="{p["img"]}" alt="{E(p["name"])}" loading="lazy">')
     tags = "".join(f'<span class="tag">{E(t)}</span>' for t in p["tags"])
-    link = f'<a class="btn" href="{p["link"]}" target="_blank" rel="noopener">{"Watch" if "vimeo.com" in p["link"] else "Visit"} <span class="arrow">→</span></a>' if p["link"] else '<span class="caption">Unreleased</span>'
+    btn = lambda href, t: f'<a class="btn" href="{href}" target="_blank" rel="noopener">{t} <span class="arrow">→</span></a>'
+    film = p.get("video") or (p["link"] if "vimeo.com" in p["link"] else "")
+    site = p["link"] if p["link"] and "Web development" in p["tags"] else ""   # the site is shown only when Adverse built it
+    link = (btn(site, "View Website") if site else "") + (btn(film, "View Video") if film else "") or '<span class="caption">Unreleased</span>'
     return f'''<article class="prow" id="{p["id"]}" data-tags="{E("|".join(p["tags"]))}" data-reveal><div class="m{" logo" if p.get("logo") else ""}">{media}</div>
         <div class="i"><p class="meta">{i+1:02d} · {E(p["sector"])}</p><h3 class="name">{E(p["name"])}</h3><p class="d">{E(p["d"])}</p></div>
-        <div class="r"><div class="tags">{tags}</div>{link}</div></article>'''
+        <div class="r"><div class="tags">{tags}</div><div class="btns">{link}</div></div></article>'''
+
+def film_card(p):
+    """Compact film card: poster, kind · year · length, title, credit line. The whole card opens the film."""
+    return f'''<a class="fcard" href="{p["link"]}" target="_blank" rel="noopener" data-tags="{E("|".join(p["tags"]))}" data-reveal><img src="{p["img"]}" alt="" loading="lazy">
+        <p class="meta">{E(p["sector"])}</p><h3 class="name">{E(p["name"])}</h3><p class="d">{E(p["d"])}</p></a>'''
 
 def portfolio():
     pf = D["portfolio"]
     tabs = "".join(f'<button class="tab" role="tab" data-filter="{"all" if f == "All" else E(f)}" aria-selected="{"true" if f == "All" else "false"}">{E(f)}</button>' for f in pf["filters"])
-    rows = "".join(row(i, p) for i, p in enumerate(D["projects"]))
+    isfilm = lambda p: p["id"].startswith("film-")
+    rows = "".join(row(i, p) for i, p in enumerate(p for p in D["projects"] if not isfilm(p)))
+    films = "".join(film_card(p) for p in D["projects"] if isfilm(p))
     return f'''{head("Portfolio · Adverse Production", "Stories of innovation, captured in motion. Selected work for Ion-X, Ægir, Alta Ares, Electronic Bird Control, Oscar Mike, Safran and Naval Group.")}
 {loader()}
 {nav("portfolio.html")}
@@ -273,6 +284,12 @@ def portfolio():
 </section>
 <section class="section" data-theme="dark" style="padding-top:0">
   <div class="container rows">{rows}</div>
+</section>
+<section class="section" data-theme="dark" id="films" style="padding-top:0">
+  <div class="container">
+    <div class="sec-head"><span class="num">Films</span><h2 class="ttl h2">{E(pf["films_title"])}</h2><p class="aside">{E(pf["films_sub"])}</p></div>
+    <div class="films">{films}</div>
+  </div>
 </section>
 {contact_block("light", "Get in touch")}
 </main>
