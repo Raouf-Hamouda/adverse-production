@@ -17,10 +17,10 @@
     "title": "All you need to make innovation seen and understood.",
     "sub": "From vision to execution, we craft the narratives, tools and experiences that make your innovation unavoidable.",
     "items": [
-      { "letter": "A", "face": "Production", "t": "Content & Visual Production", "d": "We produce impactful content that makes you unavoidable.", "list": ["Corporate films", "Motion 2D/3D", "Case studies"], "img": "media/4gLXVdehgB5LXuiAijqcHLMvoM.png", "href": "production.html" },
-      { "letter": "B", "face": "Agency", "t": "Influence Strategy", "d": "We help you define what matters and how to say it.", "list": ["Storytelling", "Influence", "Lobbying"], "img": "media/V847XMQuvVToFXwKPWp5TMTvVwc.png", "href": "agency.html#influence" },
-      { "letter": "C", "face": "Agency", "t": "Spaces & Experience Design", "d": "We design physical and digital spaces where your innovation can be seen, touched, understood.", "list": ["Showrooms", "Scenography", "Interactive displays"], "img": "media/HfeZMKZKAYDYm5zQ32ydgCmZ8.png", "href": "agency.html#spaces" },
-      { "letter": "D", "face": "Agency", "t": "Branding & Digital Presence", "d": "We create consistent, credible identity systems to support your growth.", "list": ["Graphic identity", "Website & landing pages", "Presentation kit"], "img": "media/W3XneDY1VsScIYOPMU6JfigPkQ.png", "href": "agency.html#branding" }
+      { "letter": "A", "face": "Production", "t": "Content & Visual Production", "d": "We produce impactful content that makes you unavoidable.", "list": ["Corporate films", "Motion 2D/3D", "Case studies"], "img": "media/web/77HFNbdqkvjyBUAGMFIzvGxGxUA.jpg", "href": "production.html" },
+      { "letter": "B", "face": "Agency", "t": "Influence Strategy", "d": "We help you define what matters and how to say it.", "list": ["Storytelling", "Influence", "Lobbying"], "img": "media/web/DfV5AunM2CfP4O7u4KkjLI46Qvk.jpg", "href": "agency.html#influence" },
+      { "letter": "C", "face": "Agency", "t": "Spaces & Experience Design", "d": "We design physical and digital spaces where your innovation can be seen, touched, understood.", "list": ["Showrooms", "Scenography", "Interactive displays"], "img": "media/web/q1g7qWRhrfDlzrMSrGk5NP3Iy0A.jpg", "href": "agency.html#spaces" },
+      { "letter": "D", "face": "Agency", "t": "Branding & Digital Presence", "d": "We create consistent, credible identity systems to support your growth.", "list": ["Graphic identity", "Website & landing pages", "Presentation kit"], "img": "media/web/JdtwA32k85z1Avn3bOagHdtlM8U.jpg", "href": "agency.html#branding" }
     ]
   },
   "area": {

@@ -180,7 +180,7 @@ html.menu-open, html.menu-open body { overflow: hidden; }
 @media (max-width: 629.98px) { .footer .col, .footer .col.wide { grid-column: span 6; } }
 .footer .col .title { font-family: var(--font-mono); font-size: var(--overline); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--fg-muted); margin-bottom: var(--s-3); }
 .footer .col a { display: block; padding: .25em 0; }
-.footer .big { font-family: var(--font-display); font-size: clamp(3.5rem, 16vw, 15rem); line-height: .9; letter-spacing: -.045em; margin-top: var(--s-9); white-space: nowrap; overflow: hidden; }
+.footer .big { width: min(100%, 46rem); aspect-ratio: 4.257; margin-top: var(--s-9); background: currentColor; -webkit-mask: url(../media/logo/adverse_lockup.png) left center / contain no-repeat; mask: url(../media/logo/adverse_lockup.png) left center / contain no-repeat; }   /* the real lockup, in the text colour */
 .footer .legal { display: flex; justify-content: space-between; gap: var(--s-4); flex-wrap: wrap; padding-top: var(--s-5); border-top: 1px solid var(--line); margin-top: var(--s-6); }
 
 /* ---------- mission pages (Anduril /space) */
@@ -315,3 +315,12 @@ html { overflow-x: hidden; } html, body { overflow-x: clip; }   /* hidden = fall
 .contact-block .form-wrap { max-width: 34rem; justify-self: end; width: 100%; padding: var(--s-6); border: 1px solid var(--line); border-radius: var(--r-md); background: var(--bg-2); }
 .form { gap: var(--s-5); } .field { gap: 0; } .field input, .field textarea { padding: .35em 0 .5em; } .field textarea { min-height: 5rem; }
 @media (max-width: 629.98px) { .contact-block .form-wrap { padding: var(--s-5); } .form { gap: var(--s-4); } }
+/* ---------- client pass (Flavyen, 4 Oct): film first in the hero, title on one line, films shown whole in 16:9 */
+.hero .bg video, .hero .bg img { opacity: .92; }
+.hero .bg::after { background: linear-gradient(to top, rgba(5,5,5,.88) 0%, rgba(5,5,5,.35) 32%, rgba(5,5,5,0) 62%, rgba(5,5,5,.3) 100%); }
+@media (min-width: 1080px) { .hero h1 { max-width: none; white-space: nowrap; font-size: min(var(--display-2), 4.9vw); } }
+.prow .m, .chapter .media { aspect-ratio: 16 / 9; background: #000; }
+.prow .m video, .chapter .media video { object-fit: contain; transform: none; }
+.prow { scroll-margin-top: calc(var(--nav-h) + var(--s-5)); }
+.strip img { aspect-ratio: 16 / 9; } .strip a { display: block; }
+@media (max-width: 629.98px) { .strip > figure:first-child { grid-column: 1 / -1; } }

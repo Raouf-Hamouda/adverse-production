@@ -64,7 +64,7 @@ def footer():
       <div class="col"><p class="title">Site</p>{cols}<a class="link" href="legal.html">Legal</a></div>
       <div class="col"><p class="title">Contact</p><a class="link" href="mailto:{B["email"]}">{B["email"]}</a><a class="link" href="{B["linkedin"]}" target="_blank" rel="noopener">LinkedIn</a><p class="body-s muted" style="margin-top:var(--s-3)">{E(B["address"])}</p></div>
     </div>
-    <div class="big" aria-hidden="true">{E(B["name"])}</div>
+    <div class="big" role="img" aria-label="{E(B["name"])}"></div>
     <div class="legal caption"><span>© {datetime.date.today().year} {E(B["name"])} {E(B["sub"]).upper()}</span><span>Production house · Agency · Paris</span><a class="link" href="#top">Back to top</a></div>
   </div>
 </footer>'''
@@ -123,7 +123,7 @@ def home():
     offers = "".join(f'''<a class="offer" href="{i["href"]}" data-reveal="{n*0.05:.2f}"><img src="{i["img"]}" alt="" loading="lazy"><span class="letter"><span>—— {i["letter"]}</span><span>{E(i["face"])}</span></span><span class="t">{E(i["t"])}</span><span class="d">{E(i["d"])}</span><ul>{"".join(f"<li>{E(x)}</li>" for x in i["list"])}</ul><span class="go">Learn more →</span></a>''' for n, i in enumerate(o["items"]))
     work = [p for p in D["projects"] if p.get("home")]
     cards = "".join(row(i, p) for i, p in enumerate(work))
-    photos = "".join(f'<figure><img src="{src}" alt="" loading="lazy"><figcaption>Adverse area · {i+1:02d}</figcaption></figure>' for i, src in enumerate(a["photos"]))
+    photos = "".join(f'<figure><a href="portfolio.html#{p["id"]}"><img src="{p["poster"]}" alt="{E(p["name"])}" loading="lazy"></a><figcaption>{E(p["name"])} · {E(p["sector"])}</figcaption></figure>' for p in D["projects"] if p.get("video"))   # the films themselves, each one opens its project
     subnav = "".join(f'<a href="#{i}"><span class="n">{n}</span>{t}</a>' for n, t, i in [("01","Two faces","faces"),("02","Offer","offer"),("03","Work","work"),("04","Area","area"),("05","Contact","contact")])
     return f'''{head("Adverse Production · Production house and agency for real technology", "At Adverse Production, we showcase the most outstanding tech projects through high-end video productions and the agency work around them: strategy, identity, spaces.")}
 {loader()}
@@ -252,7 +252,7 @@ def row(i, p):
     media = (f'<video data-hover muted playsinline loop preload="none" poster="{p["poster"]}" src="{vsrc(p["video"])}"></video>' if p.get("video") else f'<img src="{p["img"]}" alt="{E(p["name"])}" loading="lazy">')
     tags = "".join(f'<span class="tag">{E(t)}</span>' for t in p["tags"])
     link = f'<a class="btn" href="{p["link"]}" target="_blank" rel="noopener">{"Watch" if "vimeo.com" in p["link"] else "Visit"} <span class="arrow">→</span></a>' if p["link"] else '<span class="caption">Unreleased</span>'
-    return f'''<article class="prow" data-tags="{E("|".join(p["tags"]))}" data-reveal><div class="m{" logo" if p.get("logo") else ""}">{media}</div>
+    return f'''<article class="prow" id="{p["id"]}" data-tags="{E("|".join(p["tags"]))}" data-reveal><div class="m{" logo" if p.get("logo") else ""}">{media}</div>
         <div class="i"><p class="meta">{i+1:02d} · {E(p["sector"])}</p><h3 class="name">{E(p["name"])}</h3><p class="d">{E(p["d"])}</p></div>
         <div class="r"><div class="tags">{tags}</div>{link}</div></article>'''
 
