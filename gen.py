@@ -124,7 +124,7 @@ def home():
     offers = "".join(f'''<a class="offer" href="{i["href"]}" data-reveal="{n*0.05:.2f}"><img src="{i["img"]}" alt="" loading="lazy"><span class="letter"><span>—— {i["letter"]}</span><span>{E(i["face"])}</span></span><span class="t">{E(i["t"])}</span><span class="d">{E(i["d"])}</span><ul>{"".join(f"<li>{E(x)}</li>" for x in i["list"])}</ul><span class="go">Learn more →</span></a>''' for n, i in enumerate(o["items"]))
     work = [p for p in D["projects"] if p.get("home")]
     cards = "".join(row(i, p) for i, p in enumerate(work))
-    photos = "".join(f'<figure><a href="portfolio.html#{p["id"]}"><img src="{p["poster"]}" alt="{E(p["name"])}" loading="lazy"></a><figcaption>{E(p["name"])} · {E(p["sector"])}</figcaption></figure>' for p in D["projects"] if p.get("video"))   # the films themselves, each one opens its project
+    photos = "".join(f'''<figure><a href="portfolio.html#{p["id"]}" aria-label="{E(p["name"])}"><video data-hover muted playsinline loop preload="none" poster="{p.get("still", p["poster"])}" src="{vsrc(p["video"])}"></video></a><figcaption><b>{E(p["name"])}</b><span>{E(p["sector"])}</span></figcaption></figure>''' for p in D["projects"] if p.get("video"))   # the films themselves: one lead, four beside it, each opens its project
     subnav = "".join(f'<a href="#{i}"><span class="n">{n}</span>{t}</a>' for n, t, i in [("01","Two faces","faces"),("02","Offer","offer"),("03","Work","work"),("04","Area","area"),("05","Contact","contact")])
     return f'''{head("Adverse Production · Production house and agency for real technology", "At Adverse Production, we showcase the most outstanding tech projects through high-end video productions and the agency work around them: strategy, identity, spaces.")}
 {loader()}
@@ -239,9 +239,9 @@ def mission(key, current, subtitle):
     <div class="accordion">{partners}</div>
   </div>
 </section>
-<section class="section section-s" data-theme="accent">
-  <div class="container row between"><span class="h3">The other face: {other_t}.</span><a class="btn" href="{other}">See {other_t} <span class="arrow">→</span></a></div>
-</section>
+<a class="section section-s band" data-theme="accent" href="{other}">
+  <div class="container"><span class="k">The other face</span><span class="t">{other_t}</span><span class="go" aria-hidden="true">→</span></div>
+</a>
 {contact_block("light", "Get in touch")}
 </main>
 {footer()}
