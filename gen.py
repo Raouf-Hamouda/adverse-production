@@ -6,6 +6,8 @@ D = json.load(open(os.path.join(ROOT, "data/site.json"), encoding="utf-8"))
 B = D["brand"]; STAMP = datetime.datetime.now().strftime("%Y%m%d%H%M"); SITE_URL = "https://raouf-hamouda.github.io/adverse-production/"
 E = html.escape
 PROJ = {p["id"]: p for p in D["projects"]}
+VSTART = {p["video"]: p["start"] for p in D["projects"] if p.get("start")}   # films that open on black start at a lit frame (media fragment)
+def vsrc(v): return v + (f"#t={VSTART[v]}" if v in VSTART else "")
 
 def head(title, desc):
     return f'''<!doctype html>
@@ -75,11 +77,11 @@ def scripts():
 <script src="js/site.js?v={STAMP}"></script>
 </body></html>'''
 
-def contact_block(theme="light", idx="05"):
+def contact_block(theme="light", idx="05", head=True):   # head=False on the contact page, whose hero already carries the title
     c = D["contact"]
     return f'''<section class="section" data-theme="{theme}" id="contact">
   <div class="container">
-    <div class="sec-head"><span class="num">{idx} · Contact</span><h2 class="ttl h1">{E(c["title"])}</h2><p class="aside">{E(c["sub"])}</p></div>
+    {f'<div class="sec-head"><span class="num">{idx} · Contact</span><h2 class="ttl h1">{E(c["title"])}</h2><p class="aside">{E(c["sub"])}</p></div>' if head else ""}
     <div class="contact-block">
       <div class="lead stack">
         <p class="eyebrow">Get in touch</p>
@@ -102,7 +104,7 @@ def contact_block(theme="light", idx="05"):
 </section>'''
 
 def project_card(p, wide=False):
-    media = (f'<video class="media" data-hover muted playsinline loop preload="none" poster="{p["poster"]}" src="{p["video"]}"></video>' if p.get("video")
+    media = (f'<video class="media" data-hover muted playsinline loop preload="none" poster="{p["poster"]}" src="{vsrc(p["video"])}"></video>' if p.get("video")
              else f'<img class="media" src="{p["img"]}" alt="{E(p["name"])}" loading="lazy">')
     tags = "".join(f'<span class="tag">{E(t)}</span>' for t in p["tags"])
     href = p["link"] or "portfolio.html"; ext = ' target="_blank" rel="noopener"' if p["link"] else ""
@@ -112,6 +114,8 @@ def project_card(p, wide=False):
 # ---------------------------------------------------------------- HOME
 def home():
     h = D["hero"]; o = D["offer"]; a = D["area"]
+    first, dot, rest = h["sub"].partition(". ")   # phone shows the first sentence only (.more is hidden under 630)
+    sub = E(first + dot.strip()) + (f' <span class="more">{E(rest)}</span>' if rest else "")
     marquee = "".join(f"<span>{E(n)}</span>" for n in D["partners"])
     faces = "".join(f'''<a class="feature" href="{f["href"]}" data-reveal><span class="k">{f["k"]}</span><span class="t">{E(f["t"])}</span><span class="d">{E(f["d"])}</span><span class="go">→</span></a>''' for f in D["faces"])
     offers = "".join(f'''<a class="offer" href="{i["href"]}" data-reveal="{n*0.05:.2f}"><img src="{i["img"]}" alt="" loading="lazy"><span class="letter"><span>—— {i["letter"]}</span><span>{E(i["face"])}</span></span><span class="t">{E(i["t"])}</span><span class="d">{E(i["d"])}</span><ul>{"".join(f"<li>{E(x)}</li>" for x in i["list"])}</ul><span class="go">Learn more →</span></a>''' for n, i in enumerate(o["items"]))
@@ -130,7 +134,7 @@ def home():
     <p class="eyebrow" data-reveal>{E(h["eyebrow"])}</p>
     <h1 class="display-1 measure" style="margin-top:var(--s-5)" data-reveal="0.1">{E(h["title"])}</h1>
     <div class="grid" style="margin-top:var(--s-7)">
-      <p class="body-l span-5 muted" data-reveal="0.2">{E(h["sub"])}</p>
+      <p class="body-l span-5 muted" data-reveal="0.2">{sub}</p>
       <div class="span-7 cta" style="justify-content:flex-end;align-self:end" data-reveal="0.3"><a class="btn btn-accent" href="portfolio.html">See the work <span class="arrow">→</span></a><a class="btn" href="#contact">Get in touch</a></div>
     </div>
   </div>
@@ -185,7 +189,7 @@ def mission(key, current, subtitle):
     m = D[key]; ch = m["chapters"]; n = len(ch)
     caps = "".join(f'<li><a href="#{c["id"]}"><span><span class="i">{i+1:02d}</span>{E(c["t"])}</span></a></li>' for i, c in enumerate(ch))
     def media(c):
-        return (f'<video data-hover autoplay muted loop playsinline preload="metadata" poster="{c["poster"]}" src="{c["media"]}"></video>' if c.get("media") else f'<img src="{c["img"]}" alt="" loading="lazy">')
+        return (f'<video data-hover autoplay muted loop playsinline preload="metadata" poster="{c["poster"]}" src="{vsrc(c["media"])}"></video>' if c.get("media") else f'<img src="{c["img"]}" alt="" loading="lazy">')
     chapters = "".join(f'''<article class="chapter" id="{c["id"]}" data-title="{E(c["t"])}">
       <div class="txt"><p class="idx"><b>{i+1:02d}</b> / {n:02d}</p><h3 class="ttl">{E(c["t"])}</h3><p class="words">{E(c["w"])}</p></div>
       <div class="media">{media(c)}</div>
@@ -211,10 +215,12 @@ def mission(key, current, subtitle):
 <section class="section" data-theme="dark">
   <div class="container caps"><h4>Capabilities</h4><ul>{caps}</ul></div>
 </section>
+<div class="chap-wrap">
 <div class="chap-counter" data-theme="dark"><span><b data-cur>01</b> / {n:02d}</span><span class="bar"><i></i></span><span data-name></span></div>
 <section class="section" data-theme="dark" style="padding-top:0">
   <div class="container">{chapters}</div>
 </section>
+</div>
 <section class="statement" data-theme="light" style="background:var(--bg);color:var(--fg)">
   <div class="container">{lines}</div>
 </section>
@@ -233,7 +239,7 @@ def mission(key, current, subtitle):
 <section class="section section-s" data-theme="accent">
   <div class="container row between"><span class="h3">The other face: {other_t}.</span><a class="btn" href="{other}">See {other_t} <span class="arrow">→</span></a></div>
 </section>
-{contact_block("light", "Contact")}
+{contact_block("light", "Get in touch")}
 </main>
 {footer()}
 {scripts()}'''
@@ -241,7 +247,7 @@ def mission(key, current, subtitle):
 # ---------------------------------------------------------------- PORTFOLIO
 def row(i, p):
     """One project row: media left, sector + name + text middle, tags + link right. Used on the portfolio page and on the home."""
-    media = (f'<video data-hover muted playsinline loop preload="none" poster="{p["poster"]}" src="{p["video"]}"></video>' if p.get("video") else f'<img src="{p["img"]}" alt="{E(p["name"])}" loading="lazy">')
+    media = (f'<video data-hover muted playsinline loop preload="none" poster="{p["poster"]}" src="{vsrc(p["video"])}"></video>' if p.get("video") else f'<img src="{p["img"]}" alt="{E(p["name"])}" loading="lazy">')
     tags = "".join(f'<span class="tag">{E(t)}</span>' for t in p["tags"])
     link = f'<a class="btn" href="{p["link"]}" target="_blank" rel="noopener">Visit <span class="arrow">→</span></a>' if p["link"] else '<span class="caption">Unreleased</span>'
     return f'''<article class="prow" data-tags="{E("|".join(p["tags"]))}" data-reveal><div class="m">{media}</div>
@@ -266,7 +272,7 @@ def portfolio():
 <section class="section" data-theme="dark" style="padding-top:0">
   <div class="container rows">{rows}</div>
 </section>
-{contact_block("light", "Contact")}
+{contact_block("light", "Get in touch")}
 </main>
 {footer()}
 {scripts()}'''
@@ -279,9 +285,9 @@ def contact():
 {nav("contact.html")}
 <main id="top">
 <section class="section page-hero" data-theme="dark" style="padding-bottom:0">
-  <div class="container"><p class="eyebrow" data-reveal>Contact</p><h1 class="display-2" style="margin-top:var(--s-5)" data-reveal="0.1">{E(c["title"])}</h1></div>
+  <div class="container"><p class="eyebrow" data-reveal>Contact</p><h1 class="display-2" style="margin-top:var(--s-5)" data-reveal="0.1">{E(c["title"])}</h1><p class="body-l muted measure-l" style="margin-top:var(--s-5)" data-reveal="0.2">{E(c["sub"])}</p></div>
 </section>
-{contact_block("dark", "Contact")}
+{contact_block("dark", "Get in touch", head=False)}
 </main>
 {footer()}
 {scripts()}'''

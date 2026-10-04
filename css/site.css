@@ -288,3 +288,24 @@ html.no-js .words .w { opacity: 1; }
 @keyframes capin { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 @media (max-width: 1079.98px) { .cap-idx { grid-column: span 10; } .cap-txt { grid-column: span 6; } .cap-media { grid-column: span 4; } .cap-grid { min-height: 0; row-gap: var(--s-6); } }
 @media (max-width: 629.98px) { .cap-txt, .cap-media { grid-column: span 6; } .captabs { gap: var(--s-5); } .captab { font-size: var(--body); } .cappanel { padding: var(--s-6) var(--s-4) var(--s-4); } }
+
+/* ---------- phone: no sideways travel, more air, less text in one place */
+html { overflow-x: hidden; } html, body { overflow-x: clip; }   /* hidden = fallback for Safari before 16 */
+@media (max-width: 629.98px) {
+  :root { --margin: 1.3333rem; --section-y: 4.4444rem; --body: .8889rem; --lh-body: 1.5; }
+  .hero .more { display: none; }
+  .partners-head { flex-direction: column; gap: var(--s-2); }
+  .marquee { padding: var(--s-5) 0; } .marquee .track { gap: var(--s-8); } .marquee .track span { font-size: var(--h3); }
+  .subnav { position: static; justify-content: space-between; gap: var(--s-3); overflow-x: hidden; } .subnav a .n { display: none; }   /* five labels fit, nothing to drag sideways */
+  .sec-head { margin-bottom: var(--s-7); }
+  .feature { padding: var(--s-7) 0; row-gap: var(--s-4); }
+  .offer { min-height: 0; padding: var(--s-6) var(--s-5); } .offer ul { display: none; } .offer .go { margin-top: var(--s-3); }   /* the lists live on the linked pages */
+  .prow { padding: var(--s-7) 0; row-gap: var(--s-5); }
+  #work .prow .d { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  #work .prow .tags { display: none; }
+  .strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--s-5); overflow: visible; scroll-snap-type: none; cursor: auto; padding-bottom: 0; }
+  .stats { row-gap: var(--s-7); }
+  .spec-card { padding: var(--s-6) var(--s-5); }
+}
+.prow .m img { object-fit: contain; padding: 12%; }   /* the still tiles are client logos: show them whole */
+@media (max-width: 629.98px) { .acc .body { row-gap: var(--s-4); } }

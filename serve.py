@@ -39,5 +39,6 @@ class H(http.server.SimpleHTTPRequestHandler):
         except Exception: return super().send_head()
     def log_message(self, *a): pass
 socketserver.TCPServer.allow_reuse_address = True
-with socketserver.TCPServer(("127.0.0.1", PORT), H) as s:
+socketserver.ThreadingTCPServer.daemon_threads = True; socketserver.ThreadingTCPServer.allow_reuse_address = True
+with socketserver.ThreadingTCPServer(("127.0.0.1", PORT), H) as s:
     print(f"ADVERSE_SITE  http://localhost:{PORT}/DESIGN_SYSTEM.html"); s.serve_forever()
