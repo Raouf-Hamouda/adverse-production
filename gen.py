@@ -66,7 +66,7 @@ def footer():
       <div class="col"><p class="title">Contact</p><a class="link" href="mailto:{B["email"]}">{B["email"]}</a><a class="link" href="{B["linkedin"]}" target="_blank" rel="noopener">LinkedIn</a><p class="body-s muted" style="margin-top:var(--s-3)">{E(B["address"])}</p></div>
     </div>
     <div class="big" role="img" aria-label="{E(B["name"])}"></div>
-    <div class="legal caption"><span>© {datetime.date.today().year} {E(B["name"])} {E(B["sub"]).upper()}</span><span>Production house · Agency · Paris</span><a class="link" href="#top">Back to top</a></div>
+    <div class="legal caption"><span class="c">© {datetime.date.today().year} Adverse Production</span><span class="t">Production house · Agency · Paris</span><a class="top" href="#top">Back to top <span aria-hidden="true">↑</span></a></div>
   </div>
 </footer>'''
 

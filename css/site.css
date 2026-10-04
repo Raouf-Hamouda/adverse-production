@@ -363,3 +363,9 @@ p { text-wrap: pretty; }
 .band:hover .go { transform: translateX(.3em); }
 @media (max-width: 1079.98px) { .band .t { grid-column: span 7; } }
 @media (max-width: 629.98px) { .band .k { grid-column: 1 / -1; margin-bottom: var(--s-3); } .band .t { grid-column: span 5; } }
+/* ---------- footer base line: on the 12-col grid on desktop, two clean rows on phone */
+.footer .legal { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--s-3); align-items: baseline; }
+.footer .legal .c { grid-column: span 6; } .footer .legal .t { grid-column: span 4; } .footer .legal .top { grid-column: span 2; justify-self: end; color: var(--fg); transition: color var(--d-fast); }
+.footer .legal .top:hover { color: var(--accent); }
+@media (max-width: 1079.98px) { .footer .legal .c { grid-column: span 4; } .footer .legal .t { grid-column: span 4; } }
+@media (max-width: 629.98px) { .footer .legal .c { grid-column: span 4; grid-row: 1; } .footer .legal .top { grid-column: span 2; grid-row: 1; } .footer .legal .t { grid-column: 1 / -1; grid-row: 2; } .footer { padding-bottom: var(--s-7); } }
