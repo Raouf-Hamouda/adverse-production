@@ -127,7 +127,7 @@ html.menu-open, html.menu-open body { overflow: hidden; }
 .offer img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; z-index: 0; transform: scale(1.04); transition: opacity var(--d-slow) var(--ease-out), transform var(--d-slow) var(--ease-out); }
 .offer:hover img { opacity: .38; transform: none; }
 .offer > *:not(img) { position: relative; z-index: 1; }
-.offer .letter { font-family: var(--font-mono); font-size: var(--caption); letter-spacing: var(--track-caps); color: var(--fg-muted); display: flex; justify-content: space-between; }
+.offer .letter { font-family: var(--font-mono); font-size: var(--caption); letter-spacing: var(--track-caps); color: var(--fg-muted); display: flex; justify-content: flex-end; }
 .offer .t { font-family: var(--font-display); font-size: var(--h3); line-height: 1.1; }
 .offer .d { color: var(--fg-muted); }
 .offer ul { margin-top: auto; } .offer li { font-family: var(--font-mono); font-size: var(--caption); letter-spacing: var(--track-caps); text-transform: uppercase; padding: .6em 0; border-top: 1px solid var(--line); }
