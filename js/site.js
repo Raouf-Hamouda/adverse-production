@@ -31,6 +31,9 @@
     else { new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: .5 }).observe(v); }
   });
   document.querySelectorAll('video[autoplay]').forEach(v => { v.muted = true; v.play().catch(() => {}); });
+  /* ---- data-auto: the chapter films. Same picture as autoplay, but each one downloads and starts only when it is one screen away, and rests once two screens past */
+  const auto = new IntersectionObserver(es => es.forEach(e => { const v = e.target; if (e.isIntersecting) { if (v.preload === 'none') v.preload = 'auto'; v.play().catch(() => {}); } else if (!v.paused) v.pause(); }), { rootMargin: '100% 0px 100% 0px' });
+  document.querySelectorAll('video[data-auto]').forEach(v => auto.observe(v));
 
   /* ---- word reveal, scrubbed by scroll */
   const revealWords = el => { el.querySelectorAll('.w').forEach((w, i) => { w.classList.remove('on'); w.style.transitionDelay = (i * 35) + 'ms'; }); requestAnimationFrame(() => requestAnimationFrame(() => el.querySelectorAll('.w').forEach(w => w.classList.add('on')))); };

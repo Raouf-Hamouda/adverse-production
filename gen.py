@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """ADVERSE_SITE generator. Source of truth = data/site.json + this file. Run: python3 gen.py  -> writes the .html pages."""
-import json, html, os, datetime
+import json, html, os, re, datetime
 ROOT = os.path.dirname(os.path.abspath(__file__))
 D = json.load(open(os.path.join(ROOT, "data/site.json"), encoding="utf-8"))
 B = D["brand"]; STAMP = datetime.datetime.now().strftime("%Y%m%d%H%M"); SITE_URL = "https://raouf-hamouda.github.io/adverse-production/"
@@ -9,13 +9,35 @@ PROJ = {p["id"]: p for p in D["projects"]}
 VSTART = {p["video"]: p["start"] for p in D["projects"] if p.get("start")}   # films that open on black start at a lit frame (media fragment)
 def vsrc(v): return v + (f"#t={VSTART[v]}" if v in VSTART else "")
 
-def head(title, desc):
+def webp(p): return re.sub(r"\.(jpe?g|png)$", ".webp", p) if os.path.exists(os.path.join(ROOT, re.sub(r"\.(jpe?g|png)$", ".webp", p))) else p   # same picture, smaller file when one exists
+_DIM = {}
+def dims(p):
+    if p not in _DIM:
+        try:
+            from PIL import Image; _DIM[p] = Image.open(os.path.join(ROOT, p)).size
+        except Exception: _DIM[p] = None
+    return f' width="{_DIM[p][0]}" height="{_DIM[p][1]}"' if _DIM[p] else ""
+def img(src, alt="", cls="", lazy=True, extra=""):
+    """<img> with its real size (no layout shift), lazy + async decoding below the fold, WebP when available."""
+    return f'<img{f" class={chr(34)}{cls}{chr(34)}" if cls else ""} src="{webp(src)}" alt="{E(alt)}"{dims(webp(src))}{' loading="lazy"' if lazy else ""}{extra}>'
+PHONE = "(max-width: 1079.98px)"
+def video(src, poster, attrs, frag=True):
+    """One <video>, five <source>: phone (960 wide) AV1 / HEVC / H.264 under 1080px, desktop AV1 then the original H.264. Browser takes the first it can play."""
+    b = src[:-4]; t = f"#t={VSTART[src]}" if frag and src in VSTART else ""
+    def alt(ext, typ, media=""):
+        p = f"{b}{ext}"
+        return f'<source{f" media={chr(34)}{media}{chr(34)}" if media else ""} src="{p}{t}" type=\'{typ}\'>' if os.path.exists(os.path.join(ROOT, p)) else ""
+    srcs = alt(".p.av1.mp4", 'video/mp4; codecs="av01.0.05M.08"', PHONE) + alt(".p.hevc.mp4", 'video/mp4; codecs="hvc1.1.6.L93.B0"', PHONE) + alt(".p.mp4", "video/mp4", PHONE) + alt(".av1.mp4", 'video/mp4; codecs="av01.0.08M.08"') + f'<source src="{src}{t}" type="video/mp4">'
+    return f'<video {attrs} poster="{webp(poster)}">{srcs}</video>'
+FONTS = ["switzer-6IN5WOLRCYP4G4MOCOHOMXNON6Q7MDAR", "inter-vQyevYAyHtARFwPqUzQGpnDs", "jetbrainsmono-400", "jetbrainsmono-500"]   # the four every page paints first
+
+def head(title, desc, poster=""):
+    pre = "".join(f'<link rel="preload" href="fonts/{f}.woff2" as="font" type="font/woff2" crossorigin>' for f in FONTS) + (f'<link rel="preload" href="{webp(poster)}" as="image" fetchpriority="high">' if poster else "")
     return f'''<!doctype html>
 <html lang="en" class="no-js" data-accent="adverse">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Cache-Control" content="no-store">
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc)}">
 <meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:type" content="website"><meta property="og:site_name" content="Adverse Production">
@@ -31,6 +53,12 @@ def head(title, desc):
 <link rel="stylesheet" href="css/tokens.css?v={STAMP}">
 <link rel="stylesheet" href="css/base.css?v={STAMP}">
 <link rel="stylesheet" href="css/site.css?v={STAMP}">
+{pre}
+<script src="js/lib/lenis.min.js" defer></script>
+<script src="js/lib/gsap.min.js" defer></script>
+<script src="js/lib/ScrollTrigger.min.js" defer></script>
+<script src="js/app.js?v={STAMP}" defer></script>
+<script src="js/site.js?v={STAMP}" defer></script>
 </head>
 <body data-theme="dark">
 <div class="grid-lines" aria-hidden="true"></div>'''
@@ -50,7 +78,7 @@ def nav(current=""):
     items = "".join(f'<a class="link" href="{h}"{" aria-current=page" if h == current else ""}><span class="n">{n}</span>{E(t)}</a>' for n, t, h in NAV)
     menu = "".join(f'<a class="item" href="{h}"{" aria-current=page" if h == current else ""}><span class="n">{n}</span>{E(t)}</a>' for n, t, h in NAV)
     return f'''<nav class="nav" data-nav aria-label="Main">
-  <a class="brand" href="index.html" aria-label="{E(B["name"])} {E(B["sub"])}"><img class="logo" src="media/logo/logo_white.png" alt=""><small>{E(B["sub"])}</small></a>
+  <a class="brand" href="index.html" aria-label="{E(B["name"])} {E(B["sub"])}">{img("media/logo/logo_white.png", cls="logo", lazy=False)}<small>{E(B["sub"])}</small></a>
   <div class="nav-items">{items}</div>
   <button class="burger" aria-expanded="false" aria-controls="menu">Menu</button>
 </nav>
@@ -71,12 +99,7 @@ def footer():
 </footer>'''
 
 def scripts():
-    return f'''<script src="js/lib/lenis.min.js"></script>
-<script src="js/lib/gsap.min.js"></script>
-<script src="js/lib/ScrollTrigger.min.js"></script>
-<script src="js/app.js?v={STAMP}"></script>
-<script src="js/site.js?v={STAMP}"></script>
-</body></html>'''
+    return "</body></html>"
 
 def contact_block(theme="light", idx="05", head=True):   # head=False on the contact page, whose hero already carries the title
     c = D["contact"]
@@ -105,8 +128,7 @@ def contact_block(theme="light", idx="05", head=True):   # head=False on the con
 </section>'''
 
 def project_card(p, wide=False):
-    media = (f'<video class="media" data-hover muted playsinline loop preload="none" poster="{p["poster"]}" src="{vsrc(p["video"])}"></video>' if p.get("video")
-             else f'<img class="media" src="{p["img"]}" alt="{E(p["name"])}" loading="lazy">')
+    media = (video(p["video"], p["poster"], 'class="media" data-hover muted playsinline loop preload="none"') if p.get("video") else img(p["img"], p["name"], cls="media"))
     tags = "".join(f'<span class="tag">{E(t)}</span>' for t in p["tags"])
     href = p["link"] or "portfolio.html"; ext = ' target="_blank" rel="noopener"' if p["link"] else ""
     return f'''<a class="project{" wide" if wide else ""}" href="{href}"{ext} data-reveal>{media}
@@ -118,20 +140,20 @@ def home():
     sub = "".join(f"<span>{E(l)}</span>" for l in h["sub_lines"])   # three set lines, one per row
     def partner(n):   # logo as a mask, so every mark takes the one text colour; names without a file stay as text
         l = D.get("partner_logos", {}).get(n)
-        return (f'<span class="logo" role="img" aria-label="{E(n)}" style="-webkit-mask-image:url({l["src"]});mask-image:url({l["src"]});--w:{2.1 * l["ratio"] ** 0.6:.2f}em;--r:{l["ratio"]}"></span>' if l else f"<span>{E(n)}</span>")
+        return (f'<span class="logo" role="img" aria-label="{E(n)}" style="-webkit-mask-image:url({webp(l["src"])});mask-image:url({webp(l["src"])});--w:{2.1 * l["ratio"] ** 0.6:.2f}em;--r:{l["ratio"]}"></span>' if l else f"<span>{E(n)}</span>")
     marquee = "".join(partner(n) for n in D["partners"])
     faces = "".join(f'''<a class="feature" href="{f["href"]}" data-reveal><span class="k">{f["k"]}</span><span class="t">{E(f["t"])}</span><span class="d">{E(f["d"])}</span><span class="go">→</span></a>''' for f in D["faces"])
-    offers = "".join(f'''<a class="offer" href="{i["href"]}" data-reveal="{n*0.05:.2f}"><img src="{i["img"]}" alt="" loading="lazy"><span class="letter"><span>—— {i["letter"]}</span><span>{E(i["face"])}</span></span><span class="t">{E(i["t"])}</span><span class="d">{E(i["d"])}</span><ul>{"".join(f"<li>{E(x)}</li>" for x in i["list"])}</ul><span class="go">Learn more →</span></a>''' for n, i in enumerate(o["items"]))
+    offers = "".join(f'''<a class="offer" href="{i["href"]}" data-reveal="{n*0.05:.2f}">{img(i["img"])}<span class="letter"><span>—— {i["letter"]}</span><span>{E(i["face"])}</span></span><span class="t">{E(i["t"])}</span><span class="d">{E(i["d"])}</span><ul>{"".join(f"<li>{E(x)}</li>" for x in i["list"])}</ul><span class="go">Learn more →</span></a>''' for n, i in enumerate(o["items"]))
     work = [p for p in D["projects"] if p.get("home")]
     cards = "".join(row(i, p) for i, p in enumerate(work))
-    photos = "".join(f'''<figure><a href="portfolio.html#{p["id"]}" aria-label="{E(p["name"])}"><video data-hover muted playsinline loop preload="none" poster="{p.get("still", p["poster"])}" src="{vsrc(p["video"])}"></video></a><figcaption><b>{E(p["name"])}</b><span>{E(p["sector"])}</span></figcaption></figure>''' for p in D["projects"] if p.get("video"))   # the films themselves: one lead, four beside it, each opens its project
+    photos = "".join(f'''<figure><a href="portfolio.html#{p["id"]}" aria-label="{E(p["name"])}">{video(p["video"], p.get("still", p["poster"]), 'data-hover muted playsinline loop preload="none"')}</a><figcaption><b>{E(p["name"])}</b><span>{E(p["sector"])}</span></figcaption></figure>''' for p in D["projects"] if p.get("video"))   # the films themselves: one lead, four beside it, each opens its project
     subnav = "".join(f'<a href="#{i}"><span class="n">{n}</span>{t}</a>' for n, t, i in [("01","Two faces","faces"),("02","Offer","offer"),("03","Work","work"),("04","Area","area"),("05","Contact","contact")])
-    return f'''{head("Adverse Production · Production house and agency for real technology", "At Adverse Production, we showcase the most outstanding tech projects through high-end video productions and the agency work around them: strategy, identity, spaces.")}
+    return f'''{head("Adverse Production · Production house and agency for real technology", "At Adverse Production, we showcase the most outstanding tech projects through high-end video productions and the agency work around them: strategy, identity, spaces.", h["poster"])}
 {loader()}
 {nav("index.html")}
 <main id="top">
 <section class="hero" data-theme="dark" id="home">
-  <div class="bg"><video autoplay muted loop playsinline poster="{h["poster"]}" src="{h["video"]}"></video></div>
+  <div class="bg">{video(h["video"], h["poster"], "autoplay muted loop playsinline", frag=False)}</div>
   <span class="corner tl">Paris · France</span><span class="corner tr">Production<br>+ Agency</span>
   <div class="container">
     <p class="eyebrow" data-reveal>{E(h["eyebrow"])}</p>
@@ -192,7 +214,7 @@ def mission(key, current, subtitle):
     m = D[key]; ch = m["chapters"]; n = len(ch)
     caps = "".join(f'<li><a href="#{c["id"]}"><span><span class="i">{i+1:02d}</span>{E(c["t"])}</span></a></li>' for i, c in enumerate(ch))
     def media(c):
-        return (f'<video data-hover autoplay muted loop playsinline preload="metadata" poster="{c["poster"]}" src="{vsrc(c["media"])}"></video>' if c.get("media") else f'<img src="{c["img"]}" alt="" loading="lazy">')
+        return (video(c["media"], c["poster"], 'data-hover data-auto muted loop playsinline preload="none"') if c.get("media") else img(c["img"]))   # data-auto: plays by itself once a screen away, same look as autoplay without the 5 downloads at once
     chapters = "".join(f'''<article class="chapter" id="{c["id"]}" data-title="{E(c["t"])}">
       <div class="txt"><p class="idx"><b>{i+1:02d}</b> / {n:02d}</p><h3 class="ttl">{E(c["t"])}</h3><p class="words">{E(c["w"])}</p></div>
       <div class="media">{media(c)}</div>
@@ -202,12 +224,12 @@ def mission(key, current, subtitle):
     partners = "".join(f'''<details class="acc"{" open" if i == 0 else ""}><summary><span class="k">{i+1:02d}</span><span class="t">{E(PROJ[pid]["name"])}</span><span class="s">{E(PROJ[pid]["sector"])}</span><span class="plus">+</span></summary>
       <div class="body"><p>{E(PROJ[pid]["d"])}</p><div class="tags">{"".join(f'<span class="tag">{E(t)}</span>' for t in PROJ[pid]["tags"])}</div></div></details>''' for i, pid in enumerate(m["partners"]))
     other = "agency.html" if key == "production" else "production.html"; other_t = "Agency" if key == "production" else "Production"
-    return f'''{head(f"{m['title']} · Adverse Production", m["statement"])}
+    return f'''{head(f"{m['title']} · Adverse Production", m["statement"], m["poster"])}
 {loader()}
 {nav(current)}
 <main id="top">
 <section class="mission-hero" data-theme="dark">
-  <div class="bg"><video autoplay muted loop playsinline poster="{m["poster"]}" src="{m["video"]}"></video></div>
+  <div class="bg">{video(m["video"], m["poster"], "autoplay muted loop playsinline", frag=False)}</div>
   <div class="container stack-l">
     <p class="short" data-reveal>{E(m["tag"])}</p>
     <h1 class="display-1" data-reveal="0.1">{E(m["title"])}</h1>
@@ -250,7 +272,7 @@ def mission(key, current, subtitle):
 # ---------------------------------------------------------------- PORTFOLIO
 def row(i, p):
     """One project row: media left, sector + name + text middle, tags + link right. Used on the portfolio page and on the home."""
-    media = (f'<video data-hover muted playsinline loop preload="none" poster="{p["poster"]}" src="{vsrc(p["video"])}"></video>' if p.get("video") else f'<img src="{p["img"]}" alt="{E(p["name"])}" loading="lazy">')
+    media = (video(p["video"], p["poster"], 'data-hover muted playsinline loop preload="none"') if p.get("video") else img(p["img"], p["name"]))
     tags = "".join(f'<span class="tag">{E(t)}</span>' for t in p["tags"])
     btn = lambda href, t: f'<a class="btn" href="{href}" target="_blank" rel="noopener">{t} <span class="arrow">→</span></a>'
     film = p.get("video", "")
@@ -328,7 +350,7 @@ def notfound():
 {nav()}
 <main id="top">
 <section class="hero" data-theme="dark">
-  <div class="bg"><video autoplay muted loop playsinline poster="media/web/MLWPbW1dUQawJLhhun3dBwpgJak.jpg" src="media/web/MLWPbW1dUQawJLhhun3dBwpgJak.mp4"></video></div>
+  <div class="bg">{video("media/web/MLWPbW1dUQawJLhhun3dBwpgJak.mp4", "media/web/MLWPbW1dUQawJLhhun3dBwpgJak.jpg", "autoplay muted loop playsinline")}</div>
   <div class="container stack-l"><p class="eyebrow">404</p><h1 class="display-1">Lost in the mission.</h1><p class="body-l muted measure-l">This page does not exist, or not yet. The rest of the site does.</p><div class="row"><a class="btn btn-accent" href="index.html">Home <span class="arrow">→</span></a><a class="btn" href="portfolio.html">Portfolio</a></div></div>
 </section>
 </main>
